@@ -26,7 +26,6 @@ class MapLibrePlugin :
     private var requestHeadersChannel: MethodChannel? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        installHostScopedRequestHeadersInterceptor()
         requestHeadersChannel =
             MethodChannel(binding.binaryMessenger, REQUEST_HEADERS_CHANNEL_NAME).apply {
                 setMethodCallHandler { call, result ->
@@ -108,10 +107,23 @@ class MapLibrePlugin :
     }
 }
 
-class MapLibreMapFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+internal class MapLibreMapFactory(
+    private val createPlatformView: (Int) -> PlatformView = {
+        MapLibreRegistry.flutterApi!!.createPlatformView(it)
+    },
+    private val installRequestHeadersInterceptor: () -> Unit = {
+        installHostScopedRequestHeadersInterceptor()
+    },
+) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(
         context: Context,
         viewId: Int,
         args: Any?,
-    ): PlatformView = MapLibreRegistry.flutterApi!!.createPlatformView(viewId)
+    ): PlatformView {
+        // The Flutter callback initializes MapLibre; HttpRequestUtil requires
+        // that initialization before accepting a custom OkHttp client.
+        val platformView = createPlatformView(viewId)
+        installRequestHeadersInterceptor()
+        return platformView
+    }
 }
