@@ -1,11 +1,11 @@
 package com.github.josxha.maplibre
 
+import okhttp3.Request
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertSame
-import okhttp3.Request
 
 internal class HostScopedRequestHeadersTest {
     @AfterTest
@@ -43,9 +43,10 @@ internal class HostScopedRequestHeadersTest {
             mapOf("Authorization" to "new"),
         )
 
-        val request = HostScopedRequestHeaders.applyTo(
-            request("https://maps.example.com/tile.pbf"),
-        )
+        val request =
+            HostScopedRequestHeaders.applyTo(
+                request("https://maps.example.com/tile.pbf"),
+            )
 
         assertEquals("new", request.header("Authorization"))
         assertNull(request.header("X-Old"))

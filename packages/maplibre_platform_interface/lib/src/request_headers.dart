@@ -11,7 +11,8 @@ abstract final class MapLibreRequestHeaders {
   ///
   /// [host] must contain only a hostname or IP address, without a scheme, port,
   /// path, query, or fragment. Host matching is case-insensitive and does not
-  /// include subdomains. An empty [headers] map has the same effect as [clear].
+  /// include subdomains. An empty [headers] map has the same effect as
+  /// [clearHeaders].
   static Future<void> setHeaders(String host, Map<String, String> headers) {
     final normalizedHost = _normalizeHost(host);
     final validatedHeaders = Map<String, String>.unmodifiable(
@@ -27,7 +28,7 @@ abstract final class MapLibreRequestHeaders {
   }
 
   /// Clears all configured headers for [host].
-  static Future<void> clear(String host) =>
+  static Future<void> clearHeaders(String host) =>
       MapLibrePlatform.instance.clearRequestHeaders(_normalizeHost(host));
 
   static String _normalizeHost(String host) {

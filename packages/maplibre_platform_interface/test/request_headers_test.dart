@@ -38,8 +38,8 @@ void main() {
     expect(platform.setCalls, 2);
   });
 
-  test('clear normalizes and forwards one exact host', () async {
-    await MapLibreRequestHeaders.clear('MAPS.EXAMPLE.COM');
+  test('clearHeaders normalizes and forwards one exact host', () async {
+    await MapLibreRequestHeaders.clearHeaders('MAPS.EXAMPLE.COM');
 
     expect(platform.clearedHost, 'maps.example.com');
     expect(platform.clearCalls, 1);
@@ -55,7 +55,7 @@ void main() {
       'user@maps.example.com',
     ]) {
       expect(
-        () => MapLibreRequestHeaders.clear(host),
+        () => MapLibreRequestHeaders.clearHeaders(host),
         throwsArgumentError,
         reason: host,
       );

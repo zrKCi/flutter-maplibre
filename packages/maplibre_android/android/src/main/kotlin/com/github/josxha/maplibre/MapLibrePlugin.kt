@@ -28,7 +28,7 @@ class MapLibrePlugin :
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         installHostScopedRequestHeadersInterceptor()
         requestHeadersChannel =
-            MethodChannel(binding.binaryMessenger, requestHeadersChannelName).apply {
+            MethodChannel(binding.binaryMessenger, REQUEST_HEADERS_CHANNEL_NAME).apply {
                 setMethodCallHandler { call, result ->
                     val host = call.argument<String>("host")
                     if (host == null) {
@@ -103,7 +103,7 @@ class MapLibrePlugin :
     }
 
     private companion object {
-        const val requestHeadersChannelName =
+        const val REQUEST_HEADERS_CHANNEL_NAME =
             "plugins.flutter.io/maplibre/request_headers"
     }
 }

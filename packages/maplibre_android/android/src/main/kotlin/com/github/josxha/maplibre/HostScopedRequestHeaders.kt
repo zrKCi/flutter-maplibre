@@ -1,14 +1,14 @@
 package com.github.josxha.maplibre
 
-import java.util.Locale
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicBoolean
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.maplibre.android.module.http.HttpRequestUtil
+import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 internal object HostScopedRequestHeaders {
     private val headersByHost = ConcurrentHashMap<String, Map<String, String>>()
@@ -30,8 +30,7 @@ internal object HostScopedRequestHeaders {
     }
 
     fun applyTo(request: Request): Request {
-        val headers = headersByHost[request.url.host.lowercase(Locale.ROOT)]
-            ?: return request
+        val headers = headersByHost[request.url.host.lowercase(Locale.ROOT)] ?: return request
         return request
             .newBuilder()
             .apply {
@@ -41,8 +40,7 @@ internal object HostScopedRequestHeaders {
 }
 
 internal object HostScopedRequestHeadersInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response =
-        chain.proceed(HostScopedRequestHeaders.applyTo(chain.request()))
+    override fun intercept(chain: Interceptor.Chain): Response = chain.proceed(HostScopedRequestHeaders.applyTo(chain.request()))
 }
 
 internal fun installHostScopedRequestHeadersInterceptor() {
